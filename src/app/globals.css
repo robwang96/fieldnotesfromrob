@@ -1,26 +1,139 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/* ─── Custom fonts ─────────────────────────────────────────────
+   Why: Next.js loads Google Fonts automatically at build time.
+   No extra install needed — just declare the CSS variables here
+   and reference them in layout.tsx.
+─────────────────────────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background:  var(--background);
+  --color-foreground:  var(--foreground);
+  --color-card:        var(--card);
+  --color-border:      var(--border);
+  --color-muted:       var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary:     var(--primary);
+  --color-coral:       var(--coral);
+  --color-gold:        var(--gold);
+  --color-ink:         var(--ink);
+  --font-serif:        var(--font-playfair);
+  --font-mono:         var(--font-mono-custom);
+  --font-sans:         var(--font-sans-custom);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ─── Design tokens ────────────────────────────────────────────
+   Inspired by heyarinze.com warm, editorial palette.
+   All colours are CSS variables so Figma / a designer can swap
+   them later without touching component code.
+─────────────────────────────────────────────────────────────── */
+:root {
+  --radius:     0.5rem;
+
+  /* Surfaces */
+  --background: #f5f1ed;        /* warm cream */
+  --card:       #faf8f5;        /* slightly lighter cream for cards */
+  --foreground: #1a1714;        /* near-black warm ink */
+
+  /* Text scale */
+  --ink:        #1a1714;
+  --ink-light:  #6b6560;
+  --ink-faint:  #a8a29e;
+
+  /* Accents — coral, gold, blue (same as Arinze's palette) */
+  --coral:      #e8614d;
+  --gold:       #d4a040;
+  --blue:       #3b6fa0;
+
+  /* Borders */
+  --border:     #e2ddd8;
+  --border-light: #ede9e4;
+
+  /* shadcn compat */
+  --primary:              var(--ink);
+  --primary-foreground:   var(--background);
+  --muted:                #ede9e4;
+  --muted-foreground:     #6b6560;
+  --accent:               #ede9e4;
+  --accent-foreground:    #1a1714;
+  --destructive:          oklch(0.577 0.245 27.325);
+  --input:                var(--border);
+  --ring:                 var(--coral);
+  --popover:              var(--card);
+  --popover-foreground:   var(--foreground);
+  --secondary:            #ede9e4;
+  --secondary-foreground: var(--ink);
+  --card-foreground:      var(--ink);
+  --sidebar:              var(--card);
+  --sidebar-foreground:   var(--ink);
+  --sidebar-primary:      var(--ink);
+  --sidebar-primary-foreground: var(--background);
+  --sidebar-accent:       var(--muted);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border:       var(--border);
+  --sidebar-ring:         var(--coral);
+}
+
+/* ─── Base styles ──────────────────────────────────────────────
+   Think of these as "always apply to every element."
+─────────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--ink);
+    font-family: var(--font-mono-custom), 'IBM Plex Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-playfair), 'Playfair Display', serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── Utility classes ──────────────────────────────────────────
+   Reusable helpers that Tailwind doesn't have out of the box.
+─────────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Section divider glyph (✦──────────────✦) */
+  .glyph-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink-faint);
+    font-size: 11px;
+  }
+  .glyph-divider::before,
+  .glyph-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Coral underline link (hover effect) */
+  .accent-link {
+    position: relative;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .accent-link:hover {
+    color: var(--coral);
+  }
+
+  /* Card tilt variants — slight rotation for personality */
+  .tilt-1 { transform: rotate(-0.4deg); }
+  .tilt-2 { transform: rotate(0.3deg); }
+  .tilt-3 { transform: rotate(-0.2deg); }
 }
